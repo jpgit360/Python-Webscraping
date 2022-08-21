@@ -1,11 +1,10 @@
-from bs4 import BeautifulSoup # this module helps in web scrapping.
-import requests  # this module helps us to download a web page
+from bs4 import BeautifulSoup
+import requests 
 import pandas as pd
 from datetime import datetime
 import time
 
-def findBattingStats():
-    urlDict = { '2022' : "https://www.baseball-reference.com/teams/TOR/2022-batting.shtml",
+urlDict = { '2022' : "https://www.baseball-reference.com/teams/TOR/2022-batting.shtml",
                 '2021' : "https://www.baseball-reference.com/teams/TOR/2021-batting.shtml",
                 '2020' : "https://www.baseball-reference.com/teams/TOR/2020-batting.shtml",
                 '2019' : "https://www.baseball-reference.com/teams/TOR/2019-batting.shtml",
@@ -18,11 +17,14 @@ def findBattingStats():
                 '2012' : "https://www.baseball-reference.com/teams/TOR/2012-batting.shtml",
                 '2011' : "https://www.baseball-reference.com/teams/TOR/2011-batting.shtml",
                 '2010' : "https://www.baseball-reference.com/teams/TOR/2010-batting.shtml" }
-    season = input('Enter the season year: ')
 
-    while season not in urlDict:
-        season = input('Enter the season year: ')
-    minBattAvg = float(input('Enter min batting avg (0.xxx): '))
+season = input('Enter the season year: ')
+
+while season not in urlDict:
+    season = input('Enter the season year: ')
+minBattAvg = float(input('Enter min batting avg (0.xxx): '))
+
+def findBattingStats():
     html_text = requests.get(urlDict[season]).text
     soup = BeautifulSoup(html_text, "lxml")
 
@@ -52,8 +54,8 @@ def findBattingStats():
                 player_batt_avg /= 1000
                 player_ops /= 1000
 
-                if player_batt_avg > minBattAvg:
-                    print(f"Player Name:  {player_name}")
+                if player_batt_avg >= minBattAvg:
+                    print(f"Player Name: {player_name}")
                     print(f"Batting Avg: {player_batt_avg}")
                     print(f"player_hits: {player_hits}")
                     print(f"player_homers: {player_homers}")

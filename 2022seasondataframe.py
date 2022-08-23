@@ -1,4 +1,3 @@
-from ast import walk
 from bs4 import BeautifulSoup
 import requests  
 import pandas as pd
@@ -44,19 +43,13 @@ def findBattingStats():
 
                 player_batt_avg /= 1000
                 player_ops /= 1000
-                
-                newRow = {'Name': player_name, 
-                        'Avg': player_batt_avg, 
-                        'Hits' : player_hits,
-                        'HR' : player_homers,
-                        'RBI': player_rbis, 
-                        'Walks': player_walks, 
-                        'OPS': player_ops,
-                    }
 
-                #df2 = pd.DataFrame(newRow)
-                df = df.append(newRow, ignore_index=True)
-                #pd.concat([df,df2])
+                sers = pd.Series(
+                    [player_name, player_batt_avg, player_hits, player_homers, player_rbis, player_walks, player_ops],
+                    index = ['Name', 'Avg', 'Hits', 'HR', 'RBI', 'Walks', 'OPS']
+                )
+
+                df = pd.concat([df, sers.to_frame().T], ignore_index=True)
                 '''
                 f.write(f"Player Name: {player_name}\n")
                 f.write(f"Batting Avg: {player_batt_avg}\n")
@@ -69,9 +62,15 @@ def findBattingStats():
                 print(f'File Saved as: BlueJays', datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
                 '''
     
+
+    f = open(f'posted stats/BlueJays{currentTime}.csv', 'w')
+    
+    df.to_csv(f, index = False, line_terminator='\n')
+
+    #to console
     print(df)
     print("Time Updated:",datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
+    
 
 if __name__ == '__main__':
     while True:

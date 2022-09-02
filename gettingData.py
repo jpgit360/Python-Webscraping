@@ -1,5 +1,7 @@
 import csv
 import os
+import pandas as pd
+from unittest import result
 
 Name = input("Please provide name: ")
 directory = 'posted stats'
@@ -26,12 +28,31 @@ with open(f"posted stats/{latestFile}") as csvfile:
         if index == numPlayer:
             playerName = row['Name']
 
+#get user input for which stat
+userStat = int(input("Choose which stat:\n1. Avg\n2. Hits\n3. HR\n4. RBI\n5. Walks\n6. OPS\n>> "))
 
-for filename in os.listdir(directory):
-    f = open(f"posted stats/{filename}", "r")
+statDict = { 1 : 'Avg',
+                2 : 'Hits',
+                3 : 'HR',
+                4 : 'RBI',
+                5 : 'Walks',
+                6 : 'OPS',
+}
+df = pd.DataFrame()
+
+#get results
+for file in reversed(os.listdir(directory)): #loop through all files (oldest to newest)
+    f = open(f"posted stats/{file}", "r")
     reader = csv.DictReader(f)
-    for index, row in enumerate(reader):
-        if playerName in row['Name']:
-            print(row['Name'], "and", row['Avg'])
+    for index, row in enumerate(reader): #loop through rows within file
+        if playerName in row['Name']: #find instance of selected player
+            resultDate = row['Date']
+            resultStat = row[statDict[userStat]]
+            sers = pd.Series(
+                    [resultDate, resultStat],
+                    index = ['Date', statDict[userStat]]
+                )
+            df = pd.concat([df, sers.to_frame().T], ignore_index=True)
 
+print(df)
 

@@ -14,15 +14,18 @@ def findBattingStats():
     rows = batting_table.find('tbody').find_all('tr')
     #attrs = {'class' : None}
     currentTime = datetime.now().strftime("%d,%m,%Y %H,%M,%S")
+    '''
     data = {'Name': [], 
             'Avg': [],
             'Hits': [], 
             'HR': [],
             'RBI': [], 
             'Walks': [], 
-            'OPS': []
+            'OPS': [],
+            'Date': []
         }
-    df = pd.DataFrame(data)
+    '''
+    df = pd.DataFrame()
     #loops through player data
     for player in rows:
         rowFilled = True
@@ -45,8 +48,8 @@ def findBattingStats():
                 player_ops /= 1000
 
                 sers = pd.Series(
-                    [player_name, player_batt_avg, player_hits, player_homers, player_rbis, player_walks, player_ops],
-                    index = ['Name', 'Avg', 'Hits', 'HR', 'RBI', 'Walks', 'OPS']
+                    [player_name, player_batt_avg, player_hits, player_homers, player_rbis, player_walks, player_ops, currentTime],
+                    index = ['Name', 'Avg', 'Hits', 'HR', 'RBI', 'Walks', 'OPS', 'Date']
                 )
 
                 df = pd.concat([df, sers.to_frame().T], ignore_index=True)

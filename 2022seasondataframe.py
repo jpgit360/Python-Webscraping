@@ -13,7 +13,7 @@ def findBattingStats():
 
     rows = batting_table.find('tbody').find_all('tr')
     #attrs = {'class' : None}
-    currentTime = datetime.now().strftime("%d,%m,%Y %H,%M,%S")
+    currentTime = datetime.now().strftime("%Y,%m,%d %H,%M,%S")
     '''
     data = {'Name': [], 
             'Avg': [],
@@ -60,10 +60,10 @@ def findBattingStats():
 
     #to console
     print(df)
-    print("Time Updated:",datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    print("Time Updated:",datetime.now().strftime("%Y,%m,%d %H,%M,%S"))
     
 
 if __name__ == '__main__':
     while True:
         findBattingStats()
-        time.sleep(60)
+        time.sleep(10)

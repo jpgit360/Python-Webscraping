@@ -2,6 +2,7 @@ import csv
 import os
 import pandas as pd
 from unittest import result
+import matplotlib.pyplot as plt
 
 Name = input("Please provide name: ")
 directory = 'posted stats'
@@ -15,10 +16,7 @@ with open(f"posted stats/{latestFile}") as csvfile:
     reader = csv.DictReader(csvfile)
     for index, row in enumerate(reader):
         if Name.lower() in row['Name'].lower():
-            print("Here are the names: ",row['Name'])
-            print("\nindex: ", index)
-        else:
-            print("No")
+            print(index, ": ",row['Name'])
 
 #ask user for specific search  
 with open(f"posted stats/{latestFile}") as csvfile:
@@ -41,7 +39,7 @@ statDict = { 1 : 'Avg',
 df = pd.DataFrame()
 
 #get results
-for file in reversed(os.listdir(directory)): #loop through all files (oldest to newest)
+for file in os.listdir(directory): #loop through all files (oldest to newest)
     f = open(f"posted stats/{file}", "r")
     reader = csv.DictReader(f)
     for index, row in enumerate(reader): #loop through rows within file
@@ -55,4 +53,7 @@ for file in reversed(os.listdir(directory)): #loop through all files (oldest to 
             df = pd.concat([df, sers.to_frame().T], ignore_index=True)
 
 print(df)
+
+df.plot(x = 'Date', y = statDict[userStat], kind = 'scatter')
+plt.show()
 

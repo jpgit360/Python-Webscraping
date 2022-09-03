@@ -64,6 +64,6 @@ def findBattingStats():
     
 
 if __name__ == '__main__':
-    while True:
-        findBattingStats()
-        time.sleep(10)
+    #while True:
+    findBattingStats()
+        

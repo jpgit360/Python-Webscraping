@@ -8,24 +8,11 @@ def findBattingStats():
     url = "https://www.baseball-reference.com/teams/TOR/2022-batting.shtml"
     html_text = requests.get(url).text
     soup = BeautifulSoup(html_text, "lxml")
-
     batting_table = soup.find('div', id="all_team_batting").table
-
     rows = batting_table.find('tbody').find_all('tr')
-    #attrs = {'class' : None}
-    currentTime = datetime.now().strftime("%Y,%m,%d %H,%M,%S")
-    '''
-    data = {'Name': [], 
-            'Avg': [],
-            'Hits': [], 
-            'HR': [],
-            'RBI': [], 
-            'Walks': [], 
-            'OPS': [],
-            'Date': []
-        }
-    '''
+    currentTime = datetime.now().strftime("%Y,%m,%d")
     df = pd.DataFrame()
+
     #loops through player data
     for player in rows:
         rowFilled = True
@@ -55,7 +42,6 @@ def findBattingStats():
                 df = pd.concat([df, sers.to_frame().T], ignore_index=True)
 
     f = open(f'posted stats/BlueJays {currentTime}.csv', 'w')
-    
     df.to_csv(f, index = False, line_terminator='\n')
 
     #to console

@@ -1,13 +1,9 @@
 import csv
 import os
+from unicodedata import name
 import pandas as pd
 from unittest import result
 import matplotlib.pyplot as plt
-
-Name = input("Please provide name: ")
-directory = 'posted stats'
-numPlayer = -1
-df = pd.DataFrame()
 
 statDict = {    
     1 : 'Avg',
@@ -18,23 +14,33 @@ statDict = {
     6 : 'OPS',
 }
 
+directory = 'posted stats'
+numPlayer = -1
+nameNotFound = True
+df = pd.DataFrame()
+
 #get specific name of player from newest file
 latestFile = os.listdir(directory)[-1]
 
 #note: SEVERAL with open() STATEMENTS WERE USED AS THEY CAN EACH ONLY HANDLE ONE LOOP
 
 #ask user for macroscopic search and displays players that resemble input
-with open(f"posted stats/{latestFile}") as csvfile:
-    reader = csv.DictReader(csvfile)
-    for index, row in enumerate(reader):
-        if Name.lower() in row['Name'].lower():
-            print(index, ": ",row['Name'])
+while nameNotFound:
+    nameCount = 0
+    Name = input("Please provide name: ")
+    with open(f"posted stats/{latestFile}") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for index, row in enumerate(reader):
+            if Name.lower() in row['Name'].lower():
+                nameCount += 1
+                print(index, ": ",row['Name'])
+        if nameCount != 0:
+            nameNotFound = False
 
-#ask user for specific index search  
+#ask user for specific index search
 with open(f"posted stats/{latestFile}") as csvfile:
     reader = csv.DictReader(csvfile)
     rowCount = sum(1 for row in csvfile) - 2
-    print("row count is: ", rowCount)
     while numPlayer < 0 or numPlayer > rowCount:
         numPlayer = int(input("Provide index: "))
 
@@ -55,21 +61,17 @@ for file in os.listdir(directory): #loop through all files (oldest to newest)
     for index, row in enumerate(reader): #loop through rows within file
         if playerName in row['Name']: #find instance of selected player
             resultDate = row['Date']
-            resultStat = row[statDict[userStat]]
+            resultStat = float(row[statDict[userStat]])
             sers = pd.Series(
                     [resultDate, resultStat],
                     index = ['Date', statDict[userStat]]
                 )
             df = pd.concat([df, sers.to_frame().T], ignore_index=True)
 
-print(df)
-
 #print plot
-df.plot(
-    x = 'Date', 
-    y = statDict[userStat], 
-    kind = 'scatter', 
+df.plot.line(
+    x = 'Date',
+    y = statDict[userStat],
     title = f"{playerName}'s {statDict[userStat]}"
 )
 plt.show()
-

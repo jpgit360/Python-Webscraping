@@ -1,5 +1,5 @@
 # Python-Webscraping
-A Python Project where Toronto Blue Jays baseball batting stats are scraped from a website daily and stored into individual csv files indicating their date. 
+A Python Project where baseball batting stats are scraped from a website daily and stored into individual csv files indicating their date. 
 
 --Script Descriptions--
 
